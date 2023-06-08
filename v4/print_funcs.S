@@ -31,6 +31,38 @@ biosWriteHex:
 	jne .loop
 	ret
 
+printRegLabel:
+.loop:
+	call biosWriteChar 
+	inc di
+	mov ax,[di]
+	and ax,0XFF
+	cmp al,0
+	je .end
+	cmp al,0X3A
+	jne .loop
+	call biosWriteChar
+	inc di
+.end:
+	ret
+
+printRegisters:
+	pushad
+	lea di,[registermsg]
+	mov bp,sp
+.loop:
+	mov eax,[di]
+	mov edx,[bp]
+	call printRegLabel
+	call biosWriteHex
+	call biosWriteCRLF
+	add bp,4
+	cmp di,registermsg+32
+	jne .loop
+	popad
+	ret
+
+
 ;INPUT DS:SI
 ;Print char until 0 is found
 WriteString:

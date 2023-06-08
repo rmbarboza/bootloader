@@ -53,6 +53,7 @@ checkedd:
 
 	jc bootFailure
 
+	call printRegisters
 	cmp bx,0xAA55
 	jne bootFailure
 
@@ -66,6 +67,8 @@ checkedd:
 	mov bx,[stage2_magic]
 	cmp bx,stage2_signature ; compare the signature
 	jne Stage2Failure
+
+	;call printRegisters
 
 	jmp 0:stage2 
 
@@ -96,6 +99,7 @@ loadmsg db "Loading OS...",0
 diskerror db "Disk error. ",0
 rebootmsg db "Press any key to reboot.",0
 stage2failure db "Failed to load stage 2.",0
+registermsg db "EDI:ESI:EBP:ESP:EBX:EDX:ECX:EAX:",0
 
 times 510-($-$$) db 0 	; Pad with nulls up to 510 bytes (excl. boot magic)
 dw 0xAA55     		; magic word for BIOS
